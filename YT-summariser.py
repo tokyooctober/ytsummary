@@ -2,7 +2,7 @@
 # Thanks to Ana Bildea for the base code. https://medium.com/@anna.bildea
 #
 import whisper
-from pytube import YouTube
+from pytubefix import YouTube
 from transformers import pipeline
 import os
 from typing import List
@@ -11,25 +11,34 @@ import sys
 import nltk
 import argparse
 
+
 logging.basicConfig(filename='demo.log', encoding='utf-8', level=logging.DEBUG)
 
 
-URL = "https://www.youtube.com/watch?v=QxMa79dvq-w"
-VIDEO_NAME="MacroVoice-328"
+#URL = "https://www.youtube.com/watch?v=QxMa79dvq-w"
+URL = "https://www.youtube.com/watch?v=9sUMRNFnDU0"
+VIDEO_NAME = "MacroHive-911"
 
-# parser = argparse.ArgumentParser()
-# parser.add_argument("--url", type=str, help="provide YouTube Url")
-# parser.add_argument("--name", type=str, help="provide name of saved summary")
+parser = argparse.ArgumentParser()
+#parser.add_argument('args', nargs=2, help='Exactly 2 arguments required')
+parser.add_argument("--url", type=str, required=True, help="provide YouTube Url")
+parser.add_argument("--name", type=str, required=True, help="provide name of saved summary")
+parser.add_argument("--yes", type=str, help="provide if summary required")
 
-# args = parser.parse_args()
+args = parser.parse_args()
 
-# if args.url:
-#     URL = args.url
-# if args.name:
-#     VIDEO_NAME = args.name
+if args.url:
+    URL = args.url
+if args.name:
+    VIDEO_NAME = args.name
+if args.yes:
+    DO_SUMMARY=True
+else:
+    DO_SUMMARY=False
 
+print(f"URL: {URL}")
+print(f"Name: {VIDEO_NAME}")
 
-# print(f"URL: {URL}")
 
 def download_audio_from_youtube(url: str, video_name: str) -> str:
     #"""Download the audio from a YouTube video and save it as an MP3 file."""
@@ -63,7 +72,9 @@ def get_text(url: str, video_name: str) -> None:
 
     
 get_text(url=URL, video_name=VIDEO_NAME)
-   
+
+if not DO_SUMMARY:
+    exit(0)
 
 
 nltk.download('punkt')
