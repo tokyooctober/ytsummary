@@ -23,7 +23,7 @@ parser = argparse.ArgumentParser()
 #parser.add_argument('args', nargs=2, help='Exactly 2 arguments required')
 parser.add_argument("--url", type=str, required=True, help="provide YouTube Url")
 parser.add_argument("--name", type=str, required=True, help="provide name of saved summary")
-parser.add_argument("--yes", type=str, help="provide if summary required")
+parser.add_argument("--yes", type=str, help="provide summary if yes")
 
 args = parser.parse_args()
 
@@ -68,7 +68,7 @@ def get_text(url: str, video_name: str) -> None:
     model = load_whisper_model()
     audio_path = download_audio_from_youtube(url, video_name)
     result = transcribe_audio_to_text(model, audio_path)
-    save_text_to_file(result["text"], video_name + ".txt")
+    save_text_to_file(result["text"], video_name + "-transcript.txt")
 
     
 get_text(url=URL, video_name=VIDEO_NAME)
